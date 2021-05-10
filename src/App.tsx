@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import {useState} from 'react';
+import Setup from './components/Setup/Setup';
+//import ScoreTable from './components/ScoreTable';
 import './App.css';
 
-function App() {
+function App(): JSX.Element {
+
+//  const [scores, setScores] = useState<number[]>([]);
+  const [names, setNames] = useState<string[]>([]);
+
+/*
+  function onUndo(): void {
+    return;
+  }
+
+  function onRedo(): void {
+    return;
+  }
+
+  function onUpdateScore(score: number): void {
+    setScores([...scores, score]);
+  }
+*/
+  function onReset(): void {
+    //setScores([]);
+  }
+
+  function onModifyNames(names: string[]): void {
+    console.log('App:onModifyNames setNames to', names);
+    setNames([...names]);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Setup
+        names={names}
+        onReset={onReset}
+        onModifyNames={onModifyNames}
+      />
+{/*}      <ScoreTable
+        names={names}
+        scores={scores}
+        onUpdateScore={onUpdateScore}
+        onUndo={onUndo}
+        onRedo={onRedo}
+  /> */}
     </div>
   );
 }
