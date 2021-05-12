@@ -14,9 +14,11 @@ function Score(props: scoreTableProps): JSX.Element {
 
   function onRedo(): void {
     console.log('Score:onRedo with input:', input);
-    if (input != '') {
+    if (input != '' && props.names.length > 0) {
       props.onUpdateScore(Number(input));
       setInput('');
+    } else {
+      alert(`Please add players in setup and input a score`);
     }
   }
 
