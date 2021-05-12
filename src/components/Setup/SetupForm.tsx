@@ -5,20 +5,24 @@ import Form from 'react-bootstrap/Form';
 
 interface setupFormProps {
   names: string[];
-  onModifyNames: (names: string[])=>void; 
+  onModifyNames: (names: string[], deleteIndex?: number)=>void; 
 }
 
 function SetupForm(props: setupFormProps): JSX.Element {
 
   function onAdd(name: string): void {
-    props.onModifyNames([...props.names, name]);
+    if (props.names.includes(name)) {
+      alert(`Error ${name} exists, ignoring...`);
+    } else {
+      props.onModifyNames([...props.names, name]);
+    }
   }
 
   function onDelete(i: number): void {
     console.log('SetupForm:OnDelete deleting index:', i, props.names[i]);
     const newNames = props.names.slice();
     newNames.splice(i,1);
-    props.onModifyNames(newNames);
+    props.onModifyNames(newNames, i);
   }
 
   console.log('SetupForm names=', props.names);

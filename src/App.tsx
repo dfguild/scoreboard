@@ -1,14 +1,22 @@
 import {useEffect, useState} from 'react';
-import Setup from './components/Setup/Setup';
+import AppHeader from './components/AppHeader';
+import SetupForm from './components/Setup/SetupForm';
 import Score from './components/Score/Score';
-import Container from 'react-bootstrap/Container';
-import './App.css';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  max-width: 600px;
+  margin: 10px auto;
+`;
+
 
 function App(): JSX.Element {
 
 //  const [scores, setScores] = useState<number[]>([]);
   const [names, setNames] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
+  const [openSetup, setOpenSetup] = useState(false);
+
   useEffect(() => {
     const savedNames = localStorage.getItem('names');
     const savedScores = localStorage.getItem('scores');
@@ -17,14 +25,17 @@ function App(): JSX.Element {
     savedScores && setScores(JSON.parse(savedScores));
   }, []);
 
+  function saveScores(newScores: number[]): void {
+    setScores(newScores)
+    localStorage.setItem('scores', JSON.stringify(newScores));
+  }
+
   function onUndo(): void {
     const newScores = scores.slice(0, -1);
-    setScores(newScores);
     saveScores(newScores);
   }
 
   function onUpdateScore(score: number): void {
-    setScores([...scores, score]);
     saveScores([...scores, score]);
   }
 
@@ -33,19 +44,24 @@ function App(): JSX.Element {
     localStorage.removeItem('scores');
   }
 
-  function onModifyNames(names: string[]): void {
-    console.log('App:onModifyNames setNames to', names);
-    localStorage.setItem('names', JSON.stringify(names));
-    setNames([...names]);
+  function onModifyNames(newNames: string[], deleteIndex?: number): void {
+    console.log('App:onModifyNames setNames to', newNames);
+    localStorage.setItem('names', JSON.stringify(newNames));
+    if (deleteIndex && deleteIndex < scores.length ) saveScores(deletePlayer(deleteIndex, names.length, scores));
+    if ( names.length === newNames.length - 1 && scores.length > names.length) saveScores(addPlayer(newNames.length, scores));
+    setNames([...newNames]);
   }
 
   return (
-    <Container className="AppContainer">
-      <Setup
-        names={names}
+    <Container>
+      <AppHeader
         onReset={onReset}
-        onModifyNames={onModifyNames}
+        onSetup={()=>setOpenSetup(!openSetup)}
       />
+      { openSetup && <SetupForm 
+          names={names}
+          onModifyNames={onModifyNames}
+        /> }
       <Score
         names={names}
         scores={scores}
@@ -56,8 +72,21 @@ function App(): JSX.Element {
   );
 }
 
-function saveScores(names: number[]): void {
-  localStorage.setItem('scores', JSON.stringify(names));
+function deletePlayer(index: number, players: number, scores: number[]): number[] {
+  console.log('App:deletePlayers deleting scores for player:', index);
+  return scores.filter((_ , i) => ((i) % (players) !== index));
+}
+
+function addPlayer(newPlayerNum: number, scores: number[]): number[] {
+  const oldPlayerNum = newPlayerNum - 1;
+  const roundsCompleted = Math.floor(scores.length / oldPlayerNum);
+  const newScores = scores.slice();
+  for ( let i = roundsCompleted; i > 0; i--) {
+    if ( i * oldPlayerNum === scores.length ) continue;
+    newScores.splice( i * ( oldPlayerNum ), 0, 0);
+  }
+  console.log('App:addPlayer returning:', newScores);
+  return newScores;
 }
 
 export default App;

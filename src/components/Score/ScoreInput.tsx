@@ -1,5 +1,14 @@
-//import * as React from 'react';
-import FormControl from 'react-bootstrap/FormControl';
+//import React, {forwardRef} from 'react';
+//import FormControl from 'react-bootstrap/FormControl';
+import styled from 'styled-components';
+
+const StyledInput = styled.input`
+  max-width: 80px;
+  height: 1.5rem;
+  margin: 0px auto;
+  text-align: center;
+`;
+
 
 interface scoreInputProps {
   scoreInput: string;
@@ -7,16 +16,18 @@ interface scoreInputProps {
   onRedo: ()=>void;
 }
 
+export type Ref = HTMLInputElement;
 
-function ScoreInput(props: scoreInputProps): JSX.Element {
+function ScoreInput(props: scoreInputProps): JSX.Element  {
   return (
     <>
-      <FormControl
-        size="sm"
+      <StyledInput
+        type="text"
+        autoFocus
         value={props.scoreInput}
-        onChange={(e)=>props.onScoreInput(e.target.value)}
+        onChange={(e: React.BaseSyntheticEvent)=>props.onScoreInput(e.target.value)}
         onKeyPress={(event: React.KeyboardEvent) => {
-          if (event.key === "Enter" && props.scoreInput != '') {
+          if ((event.key === "Enter" || event.key === "Tab") && props.scoreInput != '') {
             console.log('ScoreInput in KeyPress event with enter -- call onRedo')
             props.onRedo();
           }

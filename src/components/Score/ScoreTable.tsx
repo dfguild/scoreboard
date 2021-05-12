@@ -1,5 +1,6 @@
-//import React from 'react';
+//import {createRef} from 'react';
 import ScoreInput from './ScoreInput';
+import styled from 'styled-components';
 
 interface scoreTableProps {
   names: string[];
@@ -9,26 +10,69 @@ interface scoreTableProps {
   onRedo: ()=>void;
 }
 
+const Table = styled.div.attrs({
+  className: "d-flex flex-row-wrap flex-wrap"
+})`
+
+`;
+
+type AdditionalProps = {
+  myWidth: string;
+};
+
+const Cell = styled.div<AdditionalProps>`
+  width: ${props => props.myWidth};
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  .subtotal {
+      background: #a6b7c0;
+      font-weight: bold;
+      width: 100%;
+  }
+`;
+
+const HeadingCell = styled(Cell)`
+  background: #1d495e;
+  color: white;
+  font-weight: bold;
+`;
+
+const ScoreCell = styled(Cell)`
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: center;
+`;
+
+const InputCell = styled(ScoreCell)`
+  .subtotal {
+    height: 1.5rem;
+  }
+`;
+
+
 function ScoreTable(props: scoreTableProps): JSX.Element {
   const players = props.names.length;
   const subtotals: number[] = new Array(players).fill(0);
+  const myWidth = `${100 / players}%`;
 
   return (
-    <div className="d-flex flex-row-wrap flex-wrap ScoreTable">
+    <Table>
         {props.names.map(name=>
-          <div className="ScoreTable-heading" key={name}>{name}</div>
+          <HeadingCell myWidth={myWidth} className="mx-auto" key={name}>{name}</HeadingCell>
         )}
         {props.scores.map((score, i) => {
           const playerNum = i % players;
           subtotals[playerNum] += score;
           return (
             <>
-              <TableCell key={i} score={score} subtotal={subtotals[playerNum]}/>
+              <TableCell key={i} score={score} subtotal={subtotals[playerNum]} myWidth={myWidth}/>
             </>
           );
         })}
-        <div className="InputCell">
-          <div className="InputCellInput">
+        <InputCell myWidth={myWidth}>
+          <div className="scoreinput">
             <ScoreInput
               key={props.scores.length}
               scoreInput={props.scoreInput}
@@ -36,27 +80,28 @@ function ScoreTable(props: scoreTableProps): JSX.Element {
               onRedo={props.onRedo}
             />
           </div>
-          <div className="InputCellBlankRow">
+          <div className="subtotal">
           </div>
-        </div>
-    </div>
+        </InputCell>
+    </Table>
   );
 }
 
 type tableCellProps = {
   score: number;
   subtotal: number;
+  myWidth: string;
 }
-function TableCell({score, subtotal}: tableCellProps): JSX.Element {
+function TableCell({score, subtotal, myWidth}: tableCellProps): JSX.Element {
   return (
-    <div className="TableCell">
-      <div className="TableCellScore">
+    <ScoreCell myWidth={myWidth}>
+      <div className="score">
         {score}
       </div>
-      <div className="TableCellSubtotal">
+      <div className="subtotal">
         {subtotal}
       </div>
-    </div>
+    </ScoreCell>
   );
 }
 
