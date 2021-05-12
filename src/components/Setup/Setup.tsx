@@ -1,6 +1,7 @@
-//import * as React from 'react';
-import SetupBar from './SetupBar';
+import { useState } from 'react';
+import SetupHeader from './SetupHeader';
 import SetupForm from './SetupForm';
+import './Setup.css';
 
 interface setupProps {
   names: string[];
@@ -10,20 +11,23 @@ interface setupProps {
 
 function Setup(props: setupProps): JSX.Element {
 
+  const [openSetup, setOpenSetup] = useState(false);
+
   const onSetupClick = () => {
-    return;
+    console.log('Setup:onSetupClick setting openSetup to:', !openSetup);
+    setOpenSetup(!openSetup);
   }
 
   return (
-    <div>
-      <SetupBar 
+    <div className="setup">
+      <SetupHeader 
         onReset={props.onReset}
         onSetup={onSetupClick}
       />
-      <SetupForm 
-        names={props.names}
-        onModifyNames={props.onModifyNames}
-      />
+      { openSetup && <SetupForm 
+          names={props.names}
+          onModifyNames={props.onModifyNames}
+        /> }
     </div>
   );
 }
