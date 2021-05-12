@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 
 const StyledHeader = styled.div`
+  width: 100%;
   display: flex;
   flex-flow: row no-wrap;
   justify-content: space-around;

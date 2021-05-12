@@ -10,10 +10,13 @@ interface scoreTableProps {
   onRedo: ()=>void;
 }
 
-const Table = styled.div.attrs({
-  className: "d-flex flex-row-wrap flex-wrap"
-})`
-
+const Table = styled.div`
+  ::before {
+    width: 100%;
+  }
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
 `;
 
 type AdditionalProps = {
@@ -55,7 +58,7 @@ const InputCell = styled(ScoreCell)`
 function ScoreTable(props: scoreTableProps): JSX.Element {
   const players = props.names.length;
   const subtotals: number[] = new Array(players).fill(0);
-  const myWidth = `${100 / players}%`;
+  const myWidth = players ? `${100 / players}%` : "100%";
 
   return (
     <Table>

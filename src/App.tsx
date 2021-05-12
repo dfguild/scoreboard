@@ -7,6 +7,12 @@ import styled from 'styled-components';
 const Container = styled.div`
   max-width: 600px;
   margin: 10px auto;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: start;
+  .score {
+    width: 100%;
+  }
 `;
 
 
@@ -23,6 +29,7 @@ function App(): JSX.Element {
     console.log('App:useEffect got savedNames, savedScores:', savedNames, savedScores);
     savedNames && setNames(JSON.parse(savedNames));
     savedScores && setScores(JSON.parse(savedScores));
+    savedNames || setOpenSetup(true);
   }, []);
 
   function saveScores(newScores: number[]): void {
