@@ -22,7 +22,7 @@ function ScoreInput(props: scoreInputProps): JSX.Element  {
   return (
     <>
       <StyledInput
-        type="text"
+        type="number"
         autoFocus
         value={props.scoreInput}
         onChange={(e: React.BaseSyntheticEvent)=>props.onScoreInput(e.target.value)}

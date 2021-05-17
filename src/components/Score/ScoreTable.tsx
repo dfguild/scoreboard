@@ -29,9 +29,13 @@ const Cell = styled.div<AdditionalProps>`
   flex-flow: row nowrap;
   justify-content: center;
   .subtotal {
-      background: #a6b7c0;
-      font-weight: bold;
-      width: 100%;
+    background: #a6b7c0;
+    font-weight: bold;
+    width: 100%;
+    height: 1.6rem;
+  }
+  .score {
+    height: 1.5rem;
   }
 `;
 
@@ -49,9 +53,6 @@ const ScoreCell = styled(Cell)`
 `;
 
 const InputCell = styled(ScoreCell)`
-  .subtotal {
-    height: 1.5rem;
-  }
 `;
 
 

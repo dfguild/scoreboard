@@ -10,11 +10,11 @@ interface scoreTableProps {
 }
 
 function Score(props: scoreTableProps): JSX.Element {
-  const [input, setInput] = React.useState('');
+  const [input, setInput] = React.useState<string>('');
 
   function onRedo(): void {
     console.log('Score:onRedo with input:', input);
-    if (input != '' && props.names.length > 0) {
+    if (input != null && props.names.length > 0) {
       props.onUpdateScore(Number(input));
       setInput('');
     } else {
